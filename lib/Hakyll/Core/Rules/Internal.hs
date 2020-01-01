@@ -88,7 +88,15 @@ emptyRulesState = RulesState Nothing Nothing
 -- | The monad used to compose rules
 newtype Rules a = Rules
     { unRules :: RWST RulesRead RuleSet RulesState IO a
+#ifdef MIN_VERSION_GLASGOW_HASKELL
+#if MIN_VERSION_GLASGOW_HASKELL(8, 8, 0, 0)
+    } deriving (Monad, MonadFail, Functor, Applicative)
+#else
     } deriving (Monad, Functor, Applicative)
+#endif
+#else
+    } deriving (Monad, Functor, Applicative)
+#endif
 
 
 --------------------------------------------------------------------------------

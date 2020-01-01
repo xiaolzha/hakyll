@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 --------------------------------------------------------------------------------
 module Hakyll.Core.Metadata
     ( Metadata
@@ -44,7 +45,15 @@ lookupStringList key meta =
 
 
 --------------------------------------------------------------------------------
+#ifdef MIN_VERSION_GLASGOW_HASKELL
+#if MIN_VERSION_GLASGOW_HASKELL(8, 8, 0, 0)
+class (Monad m, MonadFail m) => MonadMetadata m where
+#else
 class Monad m => MonadMetadata m where
+#endif
+#else
+class Monad m => MonadMetadata m where
+#endif
     getMetadata    :: Identifier -> m Metadata
     getMatches     :: Pattern -> m [Identifier]
 

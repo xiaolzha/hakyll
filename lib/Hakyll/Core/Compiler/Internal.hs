@@ -182,7 +182,11 @@ instance Monad Compiler where
             CompilerRequire i c'  -> return $ CompilerRequire i (c' >>= f)
             CompilerError e       -> return $ CompilerError e
     {-# INLINE (>>=) #-}
-
+#ifdef MIN_VERSION_GLASGOW_HASKELL
+#if MIN_VERSION_GLASGOW_HASKELL(8, 8, 0, 0)
+instance MonadFail Compiler where
+#endif
+#endif
     fail = compilerThrow . return
     {-# INLINE fail #-}
 
